@@ -1,19 +1,15 @@
-// @ts-check
 import { test, expect } from '@playwright/test';
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+// 🔥 Test 1
+test('Login in SauceDemo @smoke', async ({ page }) => {
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
-});
+  await page.goto("https://www.saucedemo.com");
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+  await page.locator("#user-name").fill("standard_user");
+  await page.locator("#password").fill("secret_sauce");
+  await page.locator("#login-button").click();
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+  await expect(page).toHaveURL(/inventory/);
+  await expect(page.locator('.title')).toHaveText('Products');
+  await expect(page.locator('.title')).toBeVisible();
 });
