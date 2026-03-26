@@ -28,7 +28,7 @@ const url = 'https://www.google.com/search?q=playwright+by+testers+talk';
 });
 
 // // ------------------ TEST 2 (SKIPPED) ------------------
- test.skip('Assertions in playwright2', async ({ page }) => {
+ test('Assertions in playwright2', async ({ page }) => {
 
     console.log('Test 2 is skipped...');
 

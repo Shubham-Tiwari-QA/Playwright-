@@ -8,4 +8,7 @@ test('open google page and check title @smoke', async ({ page }) => {
 
   console.log("Page Title is:", await page.title());
   console.log("Page URL is:", page.url());
+
+
 });
+

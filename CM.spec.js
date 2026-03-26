@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.use({
     headless: false,          // open browser
     launchOptions: {
-        slowMo:000,           // 2 second delay
+        slowMo:1000,           // 2 second delay
     },
 });
 
