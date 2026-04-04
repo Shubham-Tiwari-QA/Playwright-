@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bank Automation Practice</title>
+  <style>
+    body { font-family: Arial; background:#f4f6f8; margin:0; }
+    header { background:#1e3a8a; color:#fff; padding:15px; text-align:center; }
+    .container { padding:20px; }
+    .card { background:#fff; padding:20px; margin-bottom:20px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    input, select, button { padding:10px; margin:5px 0; width:100%; }
+    button { background:#2563eb; color:#fff; border:none; cursor:pointer; }
+    .hidden { display:none; }
+    .success { color:green; }
+    .error { color:red; }
+    table { width:100%; border-collapse: collapse; }
+    th, td { border:1px solid #ccc; padding:8px; }
+    .modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; align-items:center; justify-content:center; }
+    .modal-content { background:#fff; padding:20px; border-radius:10px; }
+    .tooltip { position:relative; cursor:pointer; }
+    .tooltip:hover::after { content:'Tooltip Info'; position:absolute; top:-25px; background:#000; color:#fff; padding:5px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Bank Automation Practice App</h1>
+</header>
+
+<div class="container">
+
+  <!-- LOGIN -->
+  <div class="card" id="loginCard">
+    <h2>Login</h2>
+    <input id="username" placeholder="Enter Username" />
+    <input id="password" type="password" placeholder="Enter Password" />
+    <button id="loginBtn">Login</button>
+    <p id="loginMsg"></p>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="card hidden" id="dashboard">
+    <h2>Dashboard</h2>
+    <p>Balance: ₹<span id="balance">10000</span></p>
+    <p id="actionMsg"></p>
+
+    <h3>Deposit</h3>
+    <input id="depositAmount" placeholder="Enter amount" />
+    <button id="depositBtn">Deposit</button>
+
+    <h3>Withdraw</h3>
+    <input id="withdrawAmount" placeholder="Enter amount" />
+    <button id="withdrawBtn">Withdraw</button>
+
+    <h3>Transfer</h3>
+    <input id="transferUser" placeholder="Receiver" />
+    <input id="transferAmount" placeholder="Amount" />
+    <button id="transferBtn">Transfer</button>
+
+    <h3>Enable Notifications</h3>
+    <input type="checkbox" id="notifyChk" /> Enable
+
+    <h3>Gender</h3>
+    <input type="radio" name="gender" value="male" /> Male
+    <input type="radio" name="gender" value="female" /> Female
+
+    <h3>Select Date</h3>
+    <input type="date" id="datePicker" />
+
+    <h3>Upload KYC</h3>
+    <input type="file" id="fileUpload" />
+
+    <h3>Select Account Type</h3>
+    <select id="accountType">
+      <option value="saving">Saving</option>
+      <option value="current">Current</option>
+    </select>
+
+    <h3>Transactions</h3>
+    <table id="txnTable">
+      <tr><th>Type</th><th>Amount</th></tr>
+    </table>
+
+    <button id="openModal">Open Modal</button>
+    <button id="alertBtn">Show Alert</button>
+
+    <p class="tooltip">Hover me</p>
+
+    <button id="disabledBtn" disabled>Disabled Btn</button>
+
+    <button id="loadData">Load Transactions</button>
+    <p id="loaderMsg"></p>
+
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <p>Modal Opened</p>
+    <button id="closeModal">Close</button>
+  </div>
+</div>
+
+<script>
+let balance = 10000;
+
+const balanceEl = document.getElementById('balance');
+const actionMsg = document.getElementById('actionMsg');
+const table = document.getElementById('txnTable');
+
+// LOGIN
+loginBtn.onclick = () => {
+  if(username.value==='admin' && password.value==='1234'){
+    loginCard.classList.add('hidden');
+    dashboard.classList.remove('hidden');
+    loginMsg.innerText='';
+  } else {
+    loginMsg.innerText='Invalid Credentials';
+  }
+};
+
+// ADD TRANSACTION
+function addTransaction(type, amount){
+  let row = table.insertRow();
+  row.insertCell(0).innerText = type;
+  row.insertCell(1).innerText = amount;
+}
+
+// DEPOSIT
+depositBtn.onclick = () => {
+  let amt = parseInt(depositAmount.value);
+
+  if(amt > 0){
+    balance += amt;
+    balanceEl.innerText = balance;
+
+    actionMsg.innerText = 'Deposit Successful';
+    actionMsg.className = 'success';
+
+    addTransaction('Deposit', amt);
+  } else {
+    actionMsg.innerText = 'Invalid Deposit';
+    actionMsg.className = 'error';
+  }
+};
+
+// WITHDRAW
+withdrawBtn.onclick = () => {
+  let amt = parseInt(withdrawAmount.value);
+
+  if(amt > 0 && amt <= balance){
+    balance -= amt;
+    balanceEl.innerText = balance;
+
+    actionMsg.innerText = 'Withdraw Successful';
+    actionMsg.className = 'success';
+
+    addTransaction('Withdraw', amt);
+  } else {
+    actionMsg.innerText = 'Invalid Withdraw';
+    actionMsg.className = 'error';
+  }
+};
+
+// TRANSFER
+transferBtn.onclick = () => {
+  let amt = parseInt(transferAmount.value);
+
+  if(amt > 0 && amt <= balance && transferUser.value !== ''){
+    balance -= amt;
+    balanceEl.innerText = balance;
+
+    actionMsg.innerText = 'Transfer Successful';
+    actionMsg.className = 'success';
+
+    addTransaction('Transfer', amt);
+  } else {
+    actionMsg.innerText = 'Invalid Transfer';
+    actionMsg.className = 'error';
+  }
+};
+
+// ALERT
+alertBtn.onclick = () => alert('Test Alert');
+
+// MODAL
+openModal.onclick = () => modal.style.display='flex';
+closeModal.onclick = () => modal.style.display='none';
+
+// LOADER
+loadData.onclick = () => {
+  loaderMsg.innerText='Loading...';
+  setTimeout(()=> loaderMsg.innerText='Transactions Loaded',3000);
+};
+
+// LOGOUT
+logoutBtn.onclick = () => {
+  dashboard.classList.add('hidden');
+  loginCard.classList.remove('hidden');
+};
+</script>
+
+</body>
+</html>

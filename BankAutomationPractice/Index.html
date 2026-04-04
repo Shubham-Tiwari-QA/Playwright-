@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bank Automation Practice</title>
+  <style>
+    body { font-family: Arial; background:#f4f6f8; margin:0; }
+    header { background:#1e3a8a; color:#fff; padding:15px; text-align:center; }
+    .container { padding:20px; }
+    .card { background:#fff; padding:20px; margin-bottom:20px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    input, select, button { padding:10px; margin:5px 0; width:100%; }
+    button { background:#2563eb; color:#fff; border:none; cursor:pointer; }
+    button:hover { background:#1d4ed8; }
+    .hidden { display:none; }
+    .success { color:green; }
+    .error { color:red; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Bank Automation Practice App</h1>
+</header>
+
+<div class="container">
+
+  <!-- LOGIN -->
+  <div class="card" id="loginCard">
+    <h2>Login</h2>
+    <input id="username" placeholder="Enter Username" />
+    <input id="password" type="password" placeholder="Enter Password" />
+    <button id="loginBtn">Login</button>
+    <p id="loginMsg"></p>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="card hidden" id="dashboard">
+    <h2>Dashboard</h2>
+    <p>Balance: ₹<span id="balance">10000</span></p>
+
+    <!-- DEPOSIT -->
+    <h3>Deposit</h3>
+    <input id="depositAmount" placeholder="Enter amount" />
+    <button id="depositBtn">Deposit</button>
+
+    <!-- WITHDRAW -->
+    <h3>Withdraw</h3>
+    <input id="withdrawAmount" placeholder="Enter amount" />
+    <button id="withdrawBtn">Withdraw</button>
+
+    <!-- TRANSFER -->
+    <h3>Transfer</h3>
+    <input id="transferUser" placeholder="Enter receiver" />
+    <input id="transferAmount" placeholder="Enter amount" />
+    <button id="transferBtn">Transfer</button>
+
+    <!-- DROPDOWN -->
+    <h3>Select Account Type</h3>
+    <select id="accountType">
+      <option value="saving">Saving</option>
+      <option value="current">Current</option>
+    </select>
+
+    <!-- ALERT BUTTON -->
+    <button id="alertBtn">Show Alert</button>
+
+    <!-- LOADER -->
+    <button id="loadData">Load Transactions (Wait Test)</button>
+    <p id="loaderMsg"></p>
+
+    <!-- LOGOUT -->
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+</div>
+
+<script>
+
+let balance = 10000;
+
+// LOGIN
+
+document.getElementById("loginBtn").addEventListener("click", () => {
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+
+  if(user === "admin" && pass === "1234"){
+    document.getElementById("loginMsg").innerText = "Login Success";
+    document.getElementById("loginMsg").className = "success";
+    document.getElementById("loginCard").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+  } else {
+    document.getElementById("loginMsg").innerText = "Invalid Credentials";
+    document.getElementById("loginMsg").className = "error";
+  }
+});
+
+// DEPOSIT
+
+document.getElementById("depositBtn").addEventListener("click", () => {
+  let amt = parseInt(document.getElementById("depositAmount").value);
+  if(amt > 0){
+    balance += amt;
+    document.getElementById("balance").innerText = balance;
+  }
+});
+
+// WITHDRAW
+
+document.getElementById("withdrawBtn").addEventListener("click", () => {
+  let amt = parseInt(document.getElementById("withdrawAmount").value);
+  if(amt > 0 && amt <= balance){
+    balance -= amt;
+    document.getElementById("balance").innerText = balance;
+  }
+});
+
+// TRANSFER
+
+document.getElementById("transferBtn").addEventListener("click", () => {
+  let amt = parseInt(document.getElementById("transferAmount").value);
+  if(amt > 0 && amt <= balance){
+    balance -= amt;
+    document.getElementById("balance").innerText = balance;
+    alert("Transfer Successful");
+  }
+});
+
+// ALERT
+
+document.getElementById("alertBtn").addEventListener("click", () => {
+  alert("This is a test alert");
+});
+
+// WAITS (Loader Simulation)
+
+document.getElementById("loadData").addEventListener("click", () => {
+  document.getElementById("loaderMsg").innerText = "Loading...";
+
+  setTimeout(() => {
+    document.getElementById("loaderMsg").innerText = "Transactions Loaded";
+  }, 3000);
+});
+
+// LOGOUT
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  document.getElementById("dashboard").classList.add("hidden");
+  document.getElementById("loginCard").classList.remove("hidden");
+});
+
+</script>
+
+</body>
+</html>
